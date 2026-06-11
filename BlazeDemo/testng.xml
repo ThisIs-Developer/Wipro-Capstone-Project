@@ -12,7 +12,7 @@
             <class name="testcases.FlightBookingTest"/>
         </classes>
     </test>-->
-    <test name="FlightBookingTests">
+    <test name="FlightBookingTests"  group-by-instances="true">
         <classes>
             <class name="testcases.FlightBookingTest"/>
         </classes>

@@ -13,7 +13,7 @@
           <include name="verifyFlightSearch"/>
           <include name="verifyBookingConfirmation"/>
           <include name="verifyHomePage"/>
-          <include name="verifyPurchasePage" invocation-numbers="0"/>
+          <include name="verifyPurchasePage" invocation-numbers="1 2"/>
         </methods>
       </class> <!-- testcases.FlightBookingTest -->
     </classes>

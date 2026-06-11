@@ -2,6 +2,7 @@ package testcases;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -26,28 +27,59 @@ public class FlightBookingTest extends BaseTest {
     private FlightsPage flightsPage;
     private PurchasePage purchasePage;
     private ConfirmationPage confirmationPage;
-    
+
+    private String departureCity;
+    private String destinationCity;
+
+    private String name;
+    private String address;
+    private String city;
+    private String state;
+    private String zipCode;
+
+    private String cardType;
+    private String cardNumber;
+    private String month;
+    private String year;
+    private String nameOnCard;
+
     @DataProvider(name = "bookingData")
-    public Object[][] bookingData() {
+    public static Object[][] bookingData() {
         return ExcelUtils.getExcelData("src/test/resources/testdata/FlightBookingData.xlsx","BookingData");
+    }
+
+    @Factory(dataProvider = "bookingData")
+    public FlightBookingTest(String departureCity, String destinationCity, String name, String address, String city, String state, 
+    		String zipCode, String cardType, String cardNumber, String month, String year, String nameOnCard) {
+        this.departureCity = departureCity;
+        this.destinationCity = destinationCity;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.cardType = cardType;
+        this.cardNumber = cardNumber;
+        this.month = month;
+        this.year = year;
+        this.nameOnCard = nameOnCard;
     }
 
     @Test(priority=1, groups={"smoke", "regression"})
     public void verifyHomePage() {
-        test = extent.createTest("Verify Home Page");
+        test = extent.createTest(departureCity+"->"+destinationCity);
         Log.info("Home Page Verification Started");
-        
+
         homePage = new HomePage(driver);
-        Assert.assertEquals(homePage.getPageTitle(),"BlazeDemo");
-        Assert.assertEquals(homePage.getPageUrl(),"https://blazedemo.com/");
+        Assert.assertEquals(homePage.getPageTitle(), "BlazeDemo");
+        Assert.assertEquals(homePage.getPageUrl(), "https://blazedemo.com/");
         Assert.assertTrue(homePage.isDepartureDropdownDisplayed());
         Assert.assertTrue(homePage.isDestinationDropdownDisplayed());
         Assert.assertTrue(homePage.isFindFlightsButtonDisplayed());
-
-        homePage.selectDepartureCity("Boston");
-        homePage.selectDestinationCity("London");
+        homePage.selectDepartureCity(departureCity);
+        homePage.selectDestinationCity(destinationCity);
         homePage.clickFindFlights();
-
+        
         test.pass("Home Page Verified Successfully");
         Log.info("Home Page Verification Completed");
     }
@@ -56,27 +88,24 @@ public class FlightBookingTest extends BaseTest {
     public void verifyFlightSearch() {
         test = extent.createTest("Verify Flight Search");
         Log.info("Flight Search Verification Started");
-        flightsPage = new FlightsPage(driver);
 
+        flightsPage = new FlightsPage(driver);
         Assert.assertTrue(flightsPage.isFlightTableDisplayed());
         Assert.assertTrue(flightsPage.hasFlights());
-
         flightsPage.chooseFirstFlight();
+
         test.pass("Flight Search Verified");
         Log.info("Flight Search Verification Completed");
     }
 
-    @Test(priority = 3, groups = { "regression" }, dependsOnMethods = "verifyFlightSearch", dataProvider = "bookingData")
-    public void verifyPurchasePage(String name, String address, String city, String state, String zipCode, 
-    		String cardType, String cardNumber, String month, String year, String nameOnCard) {
-
+    @Test(priority = 3, groups = { "regression" }, dependsOnMethods = "verifyFlightSearch")
+    public void verifyPurchasePage() {
         test = extent.createTest("Verify Purchase Page");
         Log.info("Purchase Page Verification Started");
-        purchasePage = new PurchasePage(driver);
 
+        purchasePage = new PurchasePage(driver);
         Assert.assertTrue(purchasePage.isPriceDisplayed());
         Assert.assertTrue(purchasePage.isTotalCostDisplayed());
-
         purchasePage.enterName(name);
         purchasePage.enterAddress(address);
         purchasePage.enterCity(city);
@@ -97,8 +126,8 @@ public class FlightBookingTest extends BaseTest {
     public void verifyBookingConfirmation() throws Exception {
         test = extent.createTest("Verify Booking Confirmation");
         Log.info("Confirmation Verification Started");
-        confirmationPage = new ConfirmationPage(driver);
 
+        confirmationPage = new ConfirmationPage(driver);
         Assert.assertEquals(confirmationPage.getSuccessMessage(),"Thank you for your purchase today!");
         Assert.assertFalse(confirmationPage.getPurchaseId().isEmpty());
         Assert.assertEquals(confirmationPage.getStatus(),"PendingCapture");
