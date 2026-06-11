@@ -1,0 +1,71 @@
+pipeline {
+
+    agent any
+
+    tools {
+        maven 'Maven3'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/ThisIs-Developer/Wipro-SDET.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('BlazeDemo') {
+                    bat 'mvn clean compile'
+                }
+            }
+        }
+        
+        stage('Compile') {
+            steps {
+                dir('BlazeDemo') {
+                    bat 'mvn compile'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('BlazeDemo') {
+                    bat 'mvn test'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                dir('BlazeDemo') {
+                    bat 'docker build -t blazedemo-framework .'
+                }
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+				bat 'docker run --rm blazedemo-framework'
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo 'Build Successful'
+        }
+
+        failure {
+            echo 'Build Failed'
+        }
+
+        always {
+            echo 'Pipeline Execution Completed'
+        }
+    }
+}

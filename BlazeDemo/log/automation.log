@@ -1,0 +1,12 @@
+2026-06-11 12:38:09 [main] INFO  Log - Launching Browser : chrome
+2026-06-11 12:38:13 [main] INFO  Log - Application Opened
+2026-06-11 12:38:13 [main] INFO  Log - Home Page Verification Started
+2026-06-11 12:38:15 [main] INFO  Log - Home Page Verification Completed
+2026-06-11 12:38:15 [main] INFO  Log - Flight Search Verification Started
+2026-06-11 12:38:15 [main] INFO  Log - Flight Search Verification Completed
+2026-06-11 12:38:17 [main] INFO  Log - Purchase Page Verification Started
+2026-06-11 12:38:19 [main] INFO  Log - Purchase Page Verification Completed
+2026-06-11 12:38:19 [main] INFO  Log - Confirmation Verification Started
+2026-06-11 12:38:19 [main] INFO  Log - Screenshot Captured
+2026-06-11 12:38:19 [main] INFO  Log - Booking Confirmation Completed
+2026-06-11 12:38:21 [main] INFO  Log - Closing Browser
