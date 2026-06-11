@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/ThisIs-Developer/Wipro-SDET.git'
+                    url: 'https://github.com/ThisIs-Developer/Wipro-Capstone-Project'
             }
         }
 
